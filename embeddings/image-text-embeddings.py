@@ -5,7 +5,7 @@ from imgBind.models.imagebind_model import ModalityType
 
 text_list = ["Kendrick lamar on white bed"]
 
-image_paths = ["./img/1.png"]
+image_paths = ["./embeddings/img/1.png"]
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
@@ -15,8 +15,9 @@ model.to(device)
 
 print("Model loaded")
 
+
 def get_image_embeddings(image_paths):
-    
+
     inputs = {
         ModalityType.VISION: data.load_and_transform_vision_data(image_paths, device),
     }
@@ -25,6 +26,7 @@ def get_image_embeddings(image_paths):
         embeddings = model(inputs)
 
     return embeddings
+
 
 def get_text_embeddings(text_list):
     inputs = {
@@ -46,7 +48,8 @@ print(image_embeddings)
 
 print(
     "Vision x Text: ",
-    torch.softmax(image_embeddings[ModalityType.VISION] @ text_embeddings[ModalityType.TEXT].T, dim=-1),
+    torch.softmax(image_embeddings[ModalityType.VISION]
+                  @ text_embeddings[ModalityType.TEXT].T, dim=-1),
 )
 
-## Find the most similar text to the image
+# Find the most similar text to the image
